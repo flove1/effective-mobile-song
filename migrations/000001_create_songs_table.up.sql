@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS songs (
+    id SERIAL PRIMARY KEY,
+    song VARCHAR(255) NOT NULL,
+    "group" VARCHAR(255) NOT NULL,
+    release_date DATE NOT NULL DEFAULT '2000-01-01',
+    "text" TEXT[] NOT NULL DEFAULT '{}',
+    link VARCHAR(255) NOT NULL DEFAULT ''
+);
+

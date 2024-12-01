@@ -1,0 +1,458 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "API for song library.",
+    "title": "Song API.",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/songs": {
+      "get": {
+        "description": "Get list of songs with optional filters",
+        "tags": [
+          "Songs"
+        ],
+        "operationId": "GetSongs",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "default": 1,
+            "x-go-name": "Page",
+            "description": "Page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "default": 10,
+            "x-go-name": "Limit",
+            "description": "Number of songs per page",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "example": "Angel",
+            "x-go-name": "Song",
+            "description": "Name of the song",
+            "name": "song",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "example": "Massive Attack",
+            "x-go-name": "Group",
+            "description": "Group of the song",
+            "name": "group",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "format": "date-time",
+            "example": "2021-01-01",
+            "x-go-name": "ReleaseDate",
+            "description": "Release date of the song",
+            "name": "release_date",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "example": "Blah-blah-blah",
+            "x-go-name": "Text",
+            "description": "Lyrics of the song",
+            "name": "text",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "example": "https://example.com",
+            "x-go-name": "Link",
+            "description": "Link to the song",
+            "name": "link",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/SongsResponse"
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/responses/ErrorResponse"
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new song by providing the group and song name",
+        "tags": [
+          "Songs"
+        ],
+        "operationId": "CreateSong",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": [
+                "song",
+                "group"
+              ],
+              "properties": {
+                "group": {
+                  "description": "Group of the song",
+                  "type": "string",
+                  "x-go-name": "Group",
+                  "example": "Massive Attack"
+                },
+                "song": {
+                  "description": "Name of the song",
+                  "type": "string",
+                  "x-go-name": "Song",
+                  "example": "Angel"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Response"
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/songs/:id": {
+      "delete": {
+        "description": "Delete a song by providing the song ID",
+        "tags": [
+          "Songs"
+        ],
+        "operationId": "DeleteSong",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Response"
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/responses/ErrorResponse"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update a song by providing the song ID and new data",
+        "tags": [
+          "Songs"
+        ],
+        "operationId": "UpdateSong",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "SongID",
+            "description": "Song ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "group": {
+                  "description": "Group of the song",
+                  "type": "string",
+                  "x-go-name": "Group",
+                  "example": "Massive Attack"
+                },
+                "link": {
+                  "description": "Link to the song",
+                  "type": "string",
+                  "x-go-name": "Link",
+                  "example": "https://example.com"
+                },
+                "release_date": {
+                  "description": "Release date of the song",
+                  "type": "string",
+                  "format": "date-time",
+                  "x-go-name": "ReleaseDate",
+                  "example": "2021-01-01"
+                },
+                "song": {
+                  "description": "Name of the song",
+                  "type": "string",
+                  "x-go-name": "Song",
+                  "example": "Angel"
+                },
+                "text": {
+                  "description": "Lyrics of the song",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "x-go-name": "Text",
+                  "example": "Blah-blah-blah"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Response"
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/songs/:id/lyrics": {
+      "get": {
+        "description": "Get lyrics for a song",
+        "tags": [
+          "Songs"
+        ],
+        "operationId": "GetSongLyrics",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "ID",
+            "description": "ID of the song",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "default": 1,
+            "x-go-name": "Page",
+            "description": "Page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "default": 1,
+            "x-go-name": "Limit",
+            "description": "Number of couplets per page",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/LyricsResponse"
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/responses/ErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PaginationMetadata": {
+      "type": "object",
+      "properties": {
+        "current_page": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CurrentPage"
+        },
+        "first_page": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "FirstPage"
+        },
+        "last_page": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "LastPage"
+        },
+        "page_size": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "PageSize"
+        },
+        "total_records": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "TotalRecords"
+        }
+      },
+      "x-go-package": "effective-mobile/go/internal/common"
+    },
+    "SongDTO": {
+      "type": "object",
+      "properties": {
+        "group": {
+          "type": "string",
+          "x-go-name": "Group"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ID"
+        },
+        "link": {
+          "type": "string",
+          "x-go-name": "Link"
+        },
+        "release_date": {
+          "x-go-name": "ReleaseDate",
+          "example": "2021-01-01"
+        },
+        "song": {
+          "type": "string",
+          "x-go-name": "Song"
+        },
+        "text": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Text"
+        }
+      },
+      "x-go-package": "effective-mobile/go/internal/song"
+    }
+  },
+  "responses": {
+    "BodyResponse": {
+      "description": "",
+      "schema": {},
+      "headers": {
+        "body": {},
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "description": "",
+      "headers": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "LyricsResponse": {
+      "description": "",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "x-go-name": "Body"
+          },
+          "message": {
+            "type": "string",
+            "x-go-name": "Message"
+          },
+          "metadata": {
+            "$ref": "#/definitions/PaginationMetadata"
+          }
+        }
+      }
+    },
+    "Response": {
+      "description": "",
+      "headers": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "SongsResponse": {
+      "description": "",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/SongDTO"
+            },
+            "x-go-name": "Body"
+          },
+          "message": {
+            "type": "string",
+            "x-go-name": "Message"
+          },
+          "metadata": {
+            "$ref": "#/definitions/PaginationMetadata"
+          }
+        }
+      }
+    }
+  }
+}
